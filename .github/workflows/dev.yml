@@ -10,16 +10,8 @@ permissions:
   id-token: write
 
 jobs:
-
-  continous-integration:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Echo AWS_ASSUME_ROLE_ARN
-        env:
-          AWS_ASSUME_ROLE_ARN: ${{ secrets.AWS_ASSUME_ROLE_ARN }}
-        run: echo "$AWS_ASSUME_ROLE_ARN"
-        
   terraform:
+    runs-on: ubuntu-latest
     uses: ./.github/workflows/deploy_pipeline.yml
     with:
       environment: dev
@@ -27,3 +19,5 @@ jobs:
       aws-region: "us-east-1"
       aws-statefile-s3-bucket: "product-ai-leonardojdss"
       aws-lock-dynamodb-table: "project-ai-terraform-lock"
+    secrets:
+      AWS_ASSUME_ROLE_ARN: ${{ secrets.AWS_ASSUME_ROLE_ARN }}
