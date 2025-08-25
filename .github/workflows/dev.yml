@@ -10,6 +10,13 @@ permissions:
   id-token: write
 
 jobs:
+
+  continous-integration:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo AWS_ASSUME_ROLE_ARN
+        run: echo "${{ secrets.AWS_ASSUME_ROLE_ARN }}"
+        
   terraform:
     uses: ./.github/workflows/deploy_pipeline.yml
     with:
