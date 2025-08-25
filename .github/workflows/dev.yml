@@ -10,16 +10,11 @@ permissions:
   id-token: write
 
 jobs:
-  terraform:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy infra
-        uses: ./.github/workflows/deploy_pipeline.yml
-        with:
-          environment: dev
-          aws-assume-role-arn: ${{ secrets.AWS_ASSUME_ROLE_ARN }}
-          aws-region: "us-east-1"
-          aws-statefile-s3-bucket: "product-ai-leonardojdss"
-          aws-lock-dynamodb-table: "project-ai-terraform-lock"
-        secrets:
-          AWS_ASSUME_ROLE_ARN: ${{ secrets.AWS_ASSUME_ROLE_ARN }}
+  deploy-dev:
+    uses: ./.github/workflows/deploy_pipeline.yml
+    with:
+      environment: dev
+      aws-assume-role-arn: ${{ secrets.AWS_ASSUME_ROLE_ARN }}
+      aws-region: "us-east-1"
+      aws-statefile-s3-bucket: "product-ai-leonardojdss"
+      aws-lock-dynamodb-table: "project-ai-terraform-lock"
