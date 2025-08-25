@@ -12,6 +12,8 @@ permissions:
 jobs:
   deploy-dev:
     uses: ./.github/workflows/deploy_pipeline.yml
+    secrets:
+      AWS_ASSUME_ROLE_ARN: ${{ secrets.AWS_ASSUME_ROLE_ARN }}
     with:
       environment: dev
       aws-assume-role-arn: ${{ secrets.AWS_ASSUME_ROLE_ARN }}
