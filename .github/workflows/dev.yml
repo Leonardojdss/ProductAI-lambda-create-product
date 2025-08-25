@@ -16,7 +16,7 @@ jobs:
       AWS_ASSUME_ROLE_ARN: ${{ secrets.AWS_ASSUME_ROLE_ARN }}
     with:
       environment: dev
-      aws-assume-role-arn: ${{ secrets.AWS_ASSUME_ROLE_ARN }}
+      aws-assume-role-arn: AWS_ASSUME_ROLE_ARN
       aws-region: "us-east-1"
       aws-statefile-s3-bucket: "product-ai-leonardojdss"
       aws-lock-dynamodb-table: "project-ai-terraform-lock"
