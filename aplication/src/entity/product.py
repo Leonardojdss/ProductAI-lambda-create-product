@@ -14,5 +14,9 @@ class Product:
     def validate(self):
         if not self.name:
             raise ValueError("Name is required")
-        if self.price <= 0:
+        if self.price is None:
+            raise ValueError("Price is required")
+        if not isinstance(self.price, int):
+            raise ValueError("Price must be an integer")
+        if self.price < 0:
             raise ValueError("Price must be positive")
