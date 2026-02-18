@@ -16,6 +16,5 @@ jobs:
       environment: prod
       aws-region: "us-east-1"
       aws-statefile-s3-bucket: "product-ai-leonardojdss"
-      aws-lock-dynamodb-table: "project-ai-terraform-lock"
     secrets:
       AWS_ASSUME_ROLE_ARN: ${{ secrets.AWS_ASSUME_ROLE_ARN }}     
