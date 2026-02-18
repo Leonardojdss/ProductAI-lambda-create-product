@@ -42,6 +42,19 @@ jobs:
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ inputs.aws-region }}
 
+      - name: Package Lambda
+        run: |
+          cd application/src
+          zip -r ../../${{ env.LAMBDA_ZIP }} .
+        env:
+          LAMBDA_ZIP: ${{ github.event.repository.name }}-${{ inputs.environment }}.zip
+
+      - name: Upload Lambda package to S3
+        run: |
+          aws s3 cp ${{ env.LAMBDA_ZIP }} s3://product-ai-leonardojdss/${{ github.event.repository.name }}/${{ env.LAMBDA_ZIP }}
+        env:
+          LAMBDA_ZIP: ${{ github.event.repository.name }}-${{ inputs.environment }}.zip
+
       - name: Read destroy configuration
         id: read-destroy-config
         run: |
@@ -62,20 +75,23 @@ jobs:
       - name: Terraform Destroy
         if: steps.read-destroy-config.outputs.destroy == 'true'
         id: terraform-destroy
-        run: cd infra &&
-          terraform workspace select ${{ inputs.environment }} || terraform workspace new ${{ inputs.environment }} &&
+        run: |
+          cd infra
+          terraform workspace select -or-create ${{ inputs.environment }}
           terraform destroy -var-file="./envs/${{ inputs.environment }}/terraform.tfvars" -auto-approve
 
       - name: Terraform Plan
         if: steps.read-destroy-config.outputs.destroy != 'true'
         id: terraform-plan
-        run: cd infra &&
-          terraform workspace select ${{ inputs.environment }} || terraform workspace new ${{ inputs.environment }} &&
+        run: |
+          cd infra
+          terraform workspace select -or-create ${{ inputs.environment }}
           terraform plan -var-file="./envs/${{ inputs.environment }}/terraform.tfvars" -out="${{ inputs.environment }}.plan"
 
       - name: Terraform Apply
         if: steps.read-destroy-config.outputs.destroy != 'true'
         id: terraform-apply
-        run: cd infra &&
-          terraform workspace select ${{ inputs.environment }} || terraform workspace new ${{ inputs.environment }} &&
+        run: |
+          cd infra
+          terraform workspace select -or-create ${{ inputs.environment }}
           terraform apply "${{ inputs.environment }}.plan"

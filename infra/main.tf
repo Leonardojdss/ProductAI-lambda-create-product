@@ -1,8 +1,11 @@
 resource "aws_lambda_function" "lambda_name" {
   function_name = var.lambda_name
   runtime       = "python3.12"
-  handler       = "main.create_product"
+  handler       = "handler.lambda_handler"
   role          = aws_iam_role.lambda_role.arn
+
+  s3_bucket = var.lambda_s3_bucket
+  s3_key    = "${var.lambda_name}/${var.lambda_name}.zip"
 
   tags = {
     Environment = var.env
