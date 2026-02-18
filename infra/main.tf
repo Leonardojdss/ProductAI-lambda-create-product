@@ -5,7 +5,7 @@ resource "aws_lambda_function" "lambda_name" {
   role          = aws_iam_role.lambda_role.arn
 
   s3_bucket = var.lambda_s3_bucket
-  s3_key    = "${var.lambda_name}/${var.lambda_name}.zip"
+  s3_key    = "ProductAI-lambda-create-product/${var.lambda_name}.zip"
 
   tags = {
     Environment = var.env
